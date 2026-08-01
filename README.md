@@ -10,7 +10,7 @@ Workstation Setup
 - OS: Ubuntu 25.10
 - Shell: zsh
 - Docker: 28.5.2
-- Git:
+- Git: 2.53.0
 
 ## 수행 항목 체크리스트
 - [x] 터미널 기본 조작 및 폴더 구성
