@@ -24,8 +24,18 @@ Workstation Setup
 - [x] Git 설정 + VSCode GitHub 연동
 
 ### 터미널 기본 조작 및 폴더 구성
-Last login: Thu Jul 30 14:36:16 on console
-lamb39723972@c6r6s6 ~ % pwd   
+- pwd : 현재 위치 확인
+- mkdir : 디렉토리 생성
+- cd : 디렉토리 이동
+- touch : 파일 생성
+- echo : 다음 오는 텍스트 출력
+- cat : 파일의 내용을 출력
+- > **.txt : 앞에 오는 내용을 txt 파일에 저장, 파일이 없다면 생성
+- ls : 현재 디렉토리에 있 파일과 폴더 목록 추출. -a : 숨겨진 항목, -l : 세부항목
+- cp : 복사
+- mv : 위치 이동 혹은 이름 변경
+- rm : 삭제
+lamb39723972@c6r6s6 ~ % pwd
 /Users/lamb39723972
 lamb39723972@c6r6s6 ~ % mkdir ~/Desktop/terminal-study
 lamb39723972@c6r6s6 ~ % cd ~/Desktop/terminal-study
@@ -60,6 +70,9 @@ drwxr-xr-x  2 lamb39723972  lamb39723972   64  7 30 16:19 practice_dir
 -rw-r--r--  1 lamb39723972  lamb39723972   12  7 30 16:20 renamed.txt
 
 ### 권한 변경 실습
+- 총 10자리
+- 파일(폴더 d) User Group Others
+- read write Execute
 lamb39723972@c6r6s6 terminal-study % ls -l renamed.txt 
 -rw-r--r--  1 lamb39723972  lamb39723972  12  7 30 16:20 renamed.txt
 lamb39723972@c6r6s6 terminal-study % chmod 444 renamed.txt 
@@ -194,6 +207,7 @@ Share images, automate workflows, and more with a free Docker ID:
 For more examples and ideas, visit:
  https://docs.docker.com/get-started/
 
+- 컨테이너 내부에서 호스트와 아예 다른 환경임을 확인할 수 있음
 lamb39723972@c6r6s6 ~ % docker run -it ubuntu /bin/bash
 root@1830d631b04a:/# ls
 bin   dev  home  lib64  mnt  proc  run   srv  tmp  var
@@ -223,7 +237,7 @@ bae5a4cca168   nginx         "/docker-entrypoint.…"   3 hours ago      Up 3 ho
 
 -> exit 입력 시 컨테이너도 함께 종료됨
 
-- docker exec 은 컨테이너의 메인 프로세스에 연결
+- docker exec 은 새로운 프로세스를 하나 더 실행해서 들어가는 방식
 - 실행 중인 컨테이너에 새로운 프로세스를 추가로 실행
 lamb39723972@c6r6s1 docker % docker run -d -it --name ubuntu-exec ubuntu bash
 dc25b6b634f3f81e42abe773ec94a8db94852cb1bd842f8fcefecee4a8630816
@@ -297,7 +311,7 @@ EXPOSE 80
 - 매번 컨테이너에 들어가서 수정할 필요 없이, COPY 명령어를 통해 이미지를 만드는 시점에 파일을 미리 포함시켜 배포 효율성을 높임.
 - 컨테이너 내부의 80번 포트를 내 컴퓨터(호스트)의 8080번 포트로 연결하여 브라우저에서 쉽게 접근할 수 있도록 설정함.
 
-- 빌드
+- 빌드 및 실행
 docker build -t nginx_test .
 docker run -d -p 8080:80 --name my-web nginx_test
 
@@ -324,7 +338,7 @@ ca08af19f8d5b00366f3d6b7fdd70f45f3febd2360a9f3b473a3a1cd8ab9d1ec
 <img width="372" height="206" alt="스크린샷 2026-08-01 오후 3 54 02" src="https://github.com/user-attachments/assets/f60e6859-35eb-4e80-84f2-d91005e5912b" />
 
 ### 볼륨 영속성
-- 컨테이너가 삭제되더 사라지지 않는 특별한 저장공간을 만드는 것
+- 컨테이너가 삭제되도 사라지지 않는 특별한 저장공간을 만드는 것
 - 볼륨 생성
 lamb39723972@c6r6s1 docker % docker volume create my-data
 my-data
