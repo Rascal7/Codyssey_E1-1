@@ -13,12 +13,12 @@ Workstation Setup
 - Git:
 
 ## 수행 항목 체크리스트
-- [o] 터미널 기본 조작 및 폴더 구성
-- [o] 권한 변경 실습
-- [o] Docker 설치/점검
-- [o] hello-world 실행
-- [o] Dockerfile 빌드/실행
-- [o] 포트 매핑 접속(2회)
+- [x] 터미널 기본 조작 및 폴더 구성
+- [x] 권한 변경 실습
+- [x] Docker 설치/점검
+- [x] hello-world 실행
+- [x] Dockerfile 빌드/실행
+- [x] 포트 매핑 접속(2회)
 - [x] 바인드 마운트 반영
 - [x] 볼륨 영속성
 - [x] Git 설정 + VSCode GitHub 연동
@@ -204,6 +204,45 @@ root@1830d631b04a:/# exit
 exit
 lamb39723972@c6r6s6 ~ %
 
+### attach / exec 비교
+- docker attach 는 컨테이너의 메인 프로세스에 연결
+lamb39723972@c6r6s1 docker % docker run -it --name ubuntu-attach ubuntu bash 
+root@0c2dc84a5240:/# ls
+bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@0c2dc84a5240:/# echo "hello"
+hello
+root@0c2dc84a5240:/# exit
+exit
+lamb39723972@c6r6s1 docker % docker ps -a                                   
+CONTAINER ID   IMAGE         COMMAND                  CREATED          STATUS                     PORTS                                     NAMES
+0c2dc84a5240   ubuntu        "bash"                   20 seconds ago   Exited (0) 3 seconds ago                                             ubuntu-attach
+ca08af19f8d5   nginx         "/docker-entrypoint.…"   2 hours ago      Up 2 hours                 0.0.0.0:8081->80/tcp, [::]:8081->80/tcp   bind-test
+94c2dff3ca22   testweb       "/docker-entrypoint.…"   3 hours ago      Up 3 hours                 0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   web-test
+4ef884062751   hello-world   "/hello"                 3 hours ago      Exited (0) 3 hours ago                                               sad_kare
+bae5a4cca168   nginx         "/docker-entrypoint.…"   3 hours ago      Up 3 hours                 80/tcp                                    my-web
+
+-> exit 입력 시 컨테이너도 함께 종료됨
+
+- docker exec 은 컨테이너의 메인 프로세스에 연결
+- 실행 중인 컨테이너에 새로운 프로세스를 추가로 실행
+lamb39723972@c6r6s1 docker % docker run -d -it --name ubuntu-exec ubuntu bash
+dc25b6b634f3f81e42abe773ec94a8db94852cb1bd842f8fcefecee4a8630816
+lamb39723972@c6r6s1 docker % docker exec -it ubuntu-exec bash
+root@dc25b6b634f3:/# ls
+bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@dc25b6b634f3:/# echo "hello"
+hello
+root@dc25b6b634f3:/# exit
+exit
+lamb39723972@c6r6s1 docker % docker ps                                       
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS                                     NAMES
+dc25b6b634f3   ubuntu    "bash"                   29 seconds ago   Up 27 seconds                                             ubuntu-exec
+ca08af19f8d5   nginx     "/docker-entrypoint.…"   2 hours ago      Up 2 hours      0.0.0.0:8081->80/tcp, [::]:8081->80/tcp   bind-test
+94c2dff3ca22   testweb   "/docker-entrypoint.…"   3 hours ago      Up 3 hours      0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   web-test
+bae5a4cca168   nginx     "/docker-e
+
+-> exit 해도 컨테이너가 종료되지 않음
+
 ### Docker 기본 명령
 - 이미지 다운로드 목록/확인
 lamb39723972@c6r6s1 docker % docker images      
@@ -312,4 +351,24 @@ root@a945fbfe7b72:/# cat /data/hello.txt
 this data
 
 ### Git 설정 + VSCode GitHub 연동
+lamb39723972@c6r6s1 docker % git config --list
+credential.helper=osxkeychain
+user.name=Rascal7
+user.email=***
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+core.ignorecase=true
+core.precomposeunicode=true
+remote.origin.url=https://github.com/Rascal7/Codyssey_E1-1.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+pull.rebase=false
+branch.main.remote=origin
+branch.main.merge=refs/heads/main
+
+<img width="566" height="291" alt="스크린샷 2026-08-01 오후 5 10 18" src="https://github.com/user-attachments/assets/6cb111bb-8f44-4925-8580-598b09889e0e" />
+
+-vscode 연동
+<img width="1409" height="1145" alt="스크린샷 2026-08-01 오후 5 15 31" src="https://github.com/user-attachments/assets/da9ae91a-121e-4c8f-806a-125d25698224" />
 
