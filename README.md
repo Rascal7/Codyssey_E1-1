@@ -18,7 +18,7 @@ Workstation Setup
 - [o] Docker 설치/점검
 - [o] hello-world 실행
 - [o] Dockerfile 빌드/실행
-- [x] 포트 매핑 접속(2회)
+- [o] 포트 매핑 접속(2회)
 - [x] 바인드 마운트 반영
 - [x] 볼륨 영속성
 - [x] Git 설정 + VSCode GitHub 연동
@@ -202,7 +202,50 @@ root@1830d631b04a:/# echo "Hello from Ubuntu"
 Hello from Ubuntu
 root@1830d631b04a:/# exit
 exit
-lamb39723972@c6r6s6 ~ % 
+lamb39723972@c6r6s6 ~ %
+
+### Docker 기본 명령
+- 이미지 다운로드 목록/확인
+lamb39723972@c6r6s1 docker % docker images      
+REPOSITORY    TAG       IMAGE ID       CREATED          SIZE
+testweb       latest    d3727cd6e393   41 minutes ago   161MB
+nginx         latest    4e5db4761e0f   2 weeks ago      161MB
+hello-world   latest    e2ac70e7319a   4 months ago     10.1kB
+
+- 컨테이너: 실행/중지/목록 확인
+lamb39723972@c6r6s1 docker % docker ps -a
+CONTAINER ID   IMAGE         COMMAND                   CREATED          STATUS                      PORTS                                     NAMES
+94c2dff3ca22   testweb       "/docker-entrypoint.…"   42 minutes ago   Up 42 minutes               0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   web-test
+4ef884062751   hello-world   "/hello"                  49 minutes ago   Exited (0) 49 minutes ago                                             sad_kare
+bae5a4cca168   nginx         "/docker-entrypoint.…"   50 minutes ago   Up 50 minutes               80/tcp                                    my-web
+
+- 운영: 로그 확인, 리소스 확인
+lamb39723972@c6r6s1 docker % docker logs my-web   
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+10-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+/docker-entrypoint.sh: Sourcing /docker-entrypoint.d/15-local-resolvers.envsh
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+/docker-entrypoint.sh: Configuration complete; ready for start up
+2026/08/01 05:30:59 [notice] 1#1: using the "epoll" event method
+2026/08/01 05:30:59 [notice] 1#1: nginx/1.31.3
+2026/08/01 05:30:59 [notice] 1#1: built by gcc 14.2.0 (Debian 14.2.0-19) 
+2026/08/01 05:30:59 [notice] 1#1: OS: Linux 6.17.8-orbstack-00308-g8f9c941121b1
+2026/08/01 05:30:59 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 20480:1048576
+2026/08/01 05:30:59 [notice] 1#1: start worker processes
+2026/08/01 05:30:59 [notice] 1#1: start worker process 29
+2026/08/01 05:30:59 [notice] 1#1: start worker process 30
+2026/08/01 05:30:59 [notice] 1#1: start worker process 31
+2026/08/01 05:30:59 [notice] 1#1: start worker process 32
+2026/08/01 05:30:59 [notice] 1#1: start worker process 33
+2026/08/01 05:30:59 [notice] 1#1: start worker process 34
+
+lamb39723972@c6r6s1 docker % docker stats my-web
+CONTAINER ID   NAME      CPU %     MEM USAGE / LIMIT     MEM %     NET I/O         BLOCK I/O         PIDS 
+bae5a4cca168   my-web    0.00%     5.215MiB / 15.67GiB   0.03%     1.87kB / 126B   16.3MB / 8.19kB   7 
 
 ### Dockerfile 빌드/실행 + 포트 매핑
 - 웹 서버 베이스 이미지 중 nginx를 활용하였다
@@ -225,5 +268,48 @@ docker run -d -p 8080:80 --name my-web nginx_test
 
 - 트러블슈팅
 - index.html 파일이 브라우저에서 렌더링되지 않고 소스 코드 그대로 출력됨.
-- 원인 : 
+- 원인 : index.html을 vscode가 아닌 텍스트 편집기로 편집하여 <p>형태로 입력되었음
+- 해결 : vscode를 이용하여 정상적인 태그 활용
+
+<img width="1694" height="1086" alt="스크린샷 2026-08-01 오후 2 40 12" src="https://github.com/user-attachments/assets/841d8795-5029-4a69-b0d7-47e55ffbf83e" />
+
+### 바인드 마운트 반영
+- 바인드 마운트하여 폴더와 동기화
+lamb39723972@c6r6s1 docker % docker run -d -p 8081:80 -v $(pwd):/usr/share/nginx/html --name bind-test nginx
+ca08af19f8d5b00366f3d6b7fdd70f45f3febd2360a9f3b473a3a1cd8ab9d1ec
+
+- 8081 로 접속
+<img width="476" height="304" alt="스크린샷 2026-08-01 오후 3 52 05" src="https://github.com/user-attachments/assets/539dde4f-d27b-4277-9a35-7cca6083aa8a" />
+
+- index.html 변경 후 재접속
+<img width="372" height="206" alt="스크린샷 2026-08-01 오후 3 54 02" src="https://github.com/user-attachments/assets/f60e6859-35eb-4e80-84f2-d91005e5912b" />
+
+### 볼륨 영속성
+- 컨테이너가 삭제되더 사라지지 않는 특별한 저장공간을 만드는 것
+- 볼륨 생성
+lamb39723972@c6r6s1 docker % docker volume create my-data
+my-data
+- 볼륨을 컨테이너의 /data 폴더에 연결하여 실행
+lamb39723972@c6r6s1 docker % docker run -it --name vol-test-1 -v my-data:/data ubuntu bash
+Unable to find image 'ubuntu:latest' locally
+latest: Pulling from library/ubuntu
+ed819469700f: Pull complete 
+a3679419df18: Pull complete 
+Digest: sha256:3131b4cc82a783df6c9df078f86e01819a13594b865c2cad47bd1bca2b7063bb
+Status: Downloaded newer image for ubuntu:latest
+- 컨테이너 내부에서 /data폴더로 이동후 파일 저장
+root@6c060684545d:/# cd /data
+root@6c060684545d:/data# echo "this data" > hello.txt
+root@6c060684545d:/data# exit
+exit
+- 컨테이너 삭제
+lamb39723972@c6r6s1 docker % docker rm vol-test-1
+vol-test-1
+- 새 컨테이너를 만들어 같은 볼륨을 연결
+lamb39723972@c6r6s1 docker % docker run -it --name vol-test-2 -v my-data:/data ubuntu bash
+- 데이터를 확인해보니 사라지지 않음을 확인
+root@a945fbfe7b72:/# cat /data/hello.txt
+this data
+
+### Git 설정 + VSCode GitHub 연동
 
