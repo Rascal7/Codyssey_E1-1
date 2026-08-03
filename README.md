@@ -34,8 +34,7 @@ Workstation Setup
 - ls : 현재 디렉토리에 있 파일과 폴더 목록 추출. -a : 숨겨진 항목, -l : 세부항목
 - cp : 복사
 - mv : 위치 이동 혹은 이름 변경
-- rm : 삭제
-
+- rm : 삭제<br>
 lamb39723972@c6r6s6 ~ % pwd
 /Users/lamb39723972
 lamb39723972@c6r6s6 ~ % mkdir ~/Desktop/terminal-study
