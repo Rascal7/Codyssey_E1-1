@@ -35,6 +35,7 @@ Workstation Setup
 - cp : 복사
 - mv : 위치 이동 혹은 이름 변경
 - rm : 삭제<br>
+₩₩₩bash
 lamb39723972@c6r6s6 ~ % pwd
 /Users/lamb39723972
 lamb39723972@c6r6s6 ~ % mkdir ~/Desktop/terminal-study
@@ -68,7 +69,7 @@ drwxr-xr-x  4 lamb39723972  lamb39723972  128  7 30 16:20 .
 drwx------+ 6 lamb39723972  lamb39723972  192  7 30 16:11 ..
 drwxr-xr-x  2 lamb39723972  lamb39723972   64  7 30 16:19 practice_dir
 -rw-r--r--  1 lamb39723972  lamb39723972   12  7 30 16:20 renamed.txt
-
+```
 ### 권한 변경 실습
 - 총 10자리
 - 파일(폴더 d) User Group Others
