@@ -35,7 +35,7 @@ Workstation Setup
 - cp : 복사
 - mv : 위치 이동 혹은 이름 변경
 - rm : 삭제<br>
-₩₩₩bash
+```bash
 lamb39723972@c6r6s6 ~ % pwd
 /Users/lamb39723972
 lamb39723972@c6r6s6 ~ % mkdir ~/Desktop/terminal-study
